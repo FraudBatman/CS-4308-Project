@@ -41,4 +41,4 @@ Make a report on our work, including:
 - the output of the scanner (see step 4 of Scanner Implementation)
 - execution of the scanner
 
-**Note: I also plan to include a link the github repo in our report, so we look more offical.**
+Note: I also plan to include a link the github repo in our report, so we look more offical. **This also means the repo will be public, so try to not leak your credit card information here.**
