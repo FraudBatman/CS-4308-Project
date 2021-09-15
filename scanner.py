@@ -2,10 +2,6 @@
 
 # where filePath is a function parameter that's just a file name
 def scanner(filePath):
-    print("lol poop")
-    return filePath
-
-
 # Comment :) 
 #
 # To print, we want the output to be 
