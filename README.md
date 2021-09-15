@@ -19,7 +19,7 @@
 
 At least 1 member of the group are terrified of the sound of this step, so I'mma break it down for them.
 1. Identify keywords and identifiers of SCL
-2. Convert keywords and identifiers into arrays
+2. Place the keywords and identifiers into arrays
 3. Create a program that takes in an scl file, and finds these keywords/identifiers
 4. Have the program output a text file of what words (aka tokens) it has determined (as we need this information with our report).
 
