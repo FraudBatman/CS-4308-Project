@@ -6,8 +6,6 @@
 - Jason Paek
 - Sam Perez
 
-(this is just alphabetical by last name don't kill meeee)
-
 ### Module 3 Deliverables (***Due September 22nd / 29th***):
 - Scanner Implementation of SCL
 - Definition of grammar of SCL
