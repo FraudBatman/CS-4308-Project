@@ -1,5 +1,5 @@
 # comments?
 # comments!
 def scanner(filePath):
-    print("poop")
+    print("lol poop")
     return filePath
