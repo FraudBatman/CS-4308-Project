@@ -53,6 +53,7 @@ def scanner(filePath):
     for line in file:
 
         varNameHere = False
+        stringyBoy = False
 
         # splits lines into individual words
         lineList = line.split()
@@ -76,6 +77,14 @@ def scanner(filePath):
             if descriptionComment:
                 if stripped == "*/":
                     descriptionComment = False
+                continue
+
+            #strings!
+            if stringyBoy:
+                continue
+
+            if '"' in stripped or "'" in stripped:
+                stringyBoy = not stringyBoy
                 continue
 
             if stripped == "description":
