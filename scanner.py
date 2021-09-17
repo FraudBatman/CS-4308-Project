@@ -1,6 +1,6 @@
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
 # (Jason Keep) keywordList = {"function": "def", "define": "="}
-Keywords = ["function", "define"]
+Keywords = []
 Operators = []
 VariableNames = []
 
@@ -22,12 +22,19 @@ def scanner(filePath):
     #
     # To print
 
-    # open file located at filePath, assign to variable file
+    # grab keywords from keywords.txt
+    kwfile = open("keywords.txt")
+    for line in kwfile:
+        Keywords.append(line)
+
+        # open file located at filePath, assign to variable file
     file = open(filePath)
     descriptionComment = False
 
     # for each syntax for every line in the file
     for line in file:
+        varNameHere = False
+
         # splits lines into individual words
         lineList = line.split()
         for word in lineList:
@@ -46,6 +53,14 @@ def scanner(filePath):
 
             if stripped == "description":
                 descriptionComment = True
+
+            # symbol and define are used to create a variable, so set the value after symbol or define to a variable name
+            if varNameHere:
+                VariableNames.append(stripped)
+                varNameHere = False
+
+            if stripped == "symbol" or stripped == "define":
+                varNameHere = True
 
             if stripped in Keywords:
                 print("Keyword found: " + stripped)
