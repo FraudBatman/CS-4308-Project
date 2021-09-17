@@ -1,5 +1,5 @@
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
-# (Jason Keep) keywordList = {"function": "def", "define": "="}
+# (Nic Keep) keywordList = {"function": "def", "define": "="}
 Keywords = []
 Operators = []
 VariableNames = []
@@ -25,7 +25,15 @@ def scanner(filePath):
     # grab keywords from keywords.txt
     kwfile = open("keywords.txt")
     for line in kwfile:
-        Keywords.append(line)
+        Keywords.append(line.strip())
+
+    opfile = open("operators.txt")
+    for line in opfile:
+        Operators.append(line.strip())
+
+    idfile = open("identifiers.txt")
+    for line in idfile:
+        VariableNames.append(line.strip())
 
         # open file located at filePath, assign to variable file
     file = open(filePath)
@@ -63,18 +71,20 @@ def scanner(filePath):
                 varNameHere = True
 
             if stripped in Keywords:
-                print("Keyword found: " + stripped)
+                #print("Keyword found: " + stripped)
                 keyWordsFound.append(stripped)
             elif stripped in Operators:
-                print("Operator found: " + stripped)
+                #print("Operator found: " + stripped)
                 operatorsFound.append(stripped)
             elif stripped in VariableNames:
-                print("Variable found:" + stripped)
+                #print("Variable found:" + stripped)
                 variableNames.append(stripped)
             else:
                 print(stripped)
 
     # gets the name of the file and ends the function
+    print(keyWordsFound)
+    print(variableNames)
     return file.name
 
 
