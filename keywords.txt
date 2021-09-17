@@ -39,3 +39,6 @@ pointer
 bool
 using
 loop
+display
+begin
+unsigned

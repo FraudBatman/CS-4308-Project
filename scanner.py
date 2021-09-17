@@ -7,11 +7,15 @@
 Keywords = []
 Operators = []
 VariableNames = []
+Constants = []
+specialChar = []
 
 # Create 3 lists to compile all the K.O.I found in the .scl files
 keyWordsFound = []
 operatorsFound = []
 variableNamesFound = []
+constantsFound = []
+specialCharFound = []
 
 
 # where filePath is a function parameter that's just a file name
@@ -39,6 +43,13 @@ def scanner(filePath):
     for line in idfile:
         VariableNames.append(line.strip())
 
+    csfile = open("constants.txt")
+    for line in csfile:
+        Constants.append(line.strip())
+
+    scfile = open("specialChar.txt")
+    for line in scfile:
+        specialChar.append(line.strip())
         # open file located at filePath, assign to variable file
     file = open(filePath)
     descriptionComment = False
@@ -98,13 +109,18 @@ def scanner(filePath):
             elif stripped in VariableNames:
                 #print("Variable found:" + stripped)
                 variableNamesFound.append(stripped)
+            elif stripped in Constants:
+                constantsFound.append(stripped)         
+            elif stripped in specialChar:
+                specialCharFound.append(stripped)
             else:
                 print(stripped)
 
     # prints the sequential K.O.I lists to see which words have been identified
-    print("\nKeywords Found: ", keyWordsFound, "\n")
-    print("Identifiers Found: ", variableNamesFound, "\n")
-    print("Operators Found: ", operatorsFound, "\n")
+    print "\nKeywords Found: ", keyWordsFound, "\n"
+    print "Identifiers Found: ", variableNamesFound, "\n"
+    print "Operators Found: ", operatorsFound, "\n"
+    print "Constants Found: ", constantsFound, "\n"
     return file.name
 
 
