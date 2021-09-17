@@ -72,6 +72,7 @@ def scanner(filePath):
         for word in lineList:
             # word.strip() gives us the word without whitespace, we can use this to compare against keywords, operators, variables
             stripped = word.strip()
+            stripped = stripped.translate(None, ',')
 
             # singleline comments in this language start with "//"
             if stripped == "//":
@@ -110,7 +111,7 @@ def scanner(filePath):
                 #print("Variable found:" + stripped)
                 variableNamesFound.append(stripped)
             elif stripped in Constants:
-                constantsFound.append(stripped)         
+                constantsFound.append(stripped)
             elif stripped in specialChar:
                 specialCharFound.append(stripped)
             else:
