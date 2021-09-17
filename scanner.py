@@ -1,18 +1,21 @@
+#CS 4308
+#Group Members: Nic Ott, Jason Paek, Sam Perez
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
-# (Nic Keep) keywordList = {"function": "def", "define": "="}
+# (Syntax for Dictionary) <keep for now> keywordList = {"function": "def", "define": "="}
+
+#Create 3 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
 VariableNames = []
 
+#Create 3 lists to compile all the K.O.I found in the .scl files 
 keyWordsFound = []
 operatorsFound = []
-variableNames = []
+variableNamesFound = []
+
+
 # where filePath is a function parameter that's just a file name
-
-
 def scanner(filePath):
-    # Comment :)
-    #
     # To print, we want the output to be
     # Keywords: kw1, kw2, kw3, kw4, kww5, kw6...
     # Identifiers: id1, id2, id3, id4, id5, id6....
@@ -21,7 +24,6 @@ def scanner(filePath):
     # need to be added to an array(potentially of strings) into an array.
     #
     # To print
-
     # grab keywords from keywords.txt
     kwfile = open("keywords.txt")
     for line in kwfile:
@@ -62,12 +64,12 @@ def scanner(filePath):
             if stripped == "description":
                 descriptionComment = True
 
-            # symbol and define are used to create a variable, so set the value after symbol or define to a variable name
+            # symbol and define are used to create a variable, so set the value after symbol, define, or method to a variable name
             if varNameHere:
                 VariableNames.append(stripped)
                 varNameHere = False
 
-            if stripped == "symbol" or stripped == "define":
+            if stripped == "symbol" or stripped == "define" or stripped == "method":
                 varNameHere = True
 
             if stripped in Keywords:
@@ -78,14 +80,21 @@ def scanner(filePath):
                 operatorsFound.append(stripped)
             elif stripped in VariableNames:
                 #print("Variable found:" + stripped)
-                variableNames.append(stripped)
+                variableNamesFound.append(stripped)
             else:
                 print(stripped)
 
-    # gets the name of the file and ends the function
-    print(keyWordsFound)
-    print(variableNames)
+    #prints the sequential K.O.I lists to see which words have been identified
+    print "Keywords Found: ", keyWordsFound , "\n"
+    print "Identifiers Found: ", variableNamesFound, "\n"
+    print "Operators Found: ", operatorsFound, "\n"
     return file.name
 
-
+# gets the name of the file and ends the function
 scanner("test.scl")
+scanner("arduino_ex1.scl")
+scanner("arrayex1b.scl")
+scanner("bitops1.scl")
+scanner("datablistp.scl")
+scanner("linkedg.scl")
+scanner("welcome.scl")
