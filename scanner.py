@@ -1,14 +1,14 @@
-#CS 4308
-#Group Members: Nic Ott, Jason Paek, Sam Perez
+# CS 4308
+# Group Members: Nic Ott, Jason Paek, Sam Perez
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
 # (Syntax for Dictionary) <keep for now> keywordList = {"function": "def", "define": "="}
 
-#Create 3 lists to define the keywords, operators, and identifiers
+# Create 3 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
 VariableNames = []
 
-#Create 3 lists to compile all the K.O.I found in the .scl files 
+# Create 3 lists to compile all the K.O.I found in the .scl files
 keyWordsFound = []
 operatorsFound = []
 variableNamesFound = []
@@ -18,13 +18,15 @@ variableNamesFound = []
 def scanner(filePath):
     # To print, we want the output to be
     # Keywords: kw1, kw2, kw3, kw4, kww5, kw6...
-    # Identifiers: id1, id2, id3, id4, id5, id6....
+    # Identifiers: id1, id2, id3, id4, id5, id6...
+    # Operators: o1, o2, o3, o4, o5, o6...
     #
-    # To do so, the file needs to be scanned line by line, each word read, and the keywords/identifiers
+    # To do so, the file needs to be scanned line by line, each word read, and the keywords/identifiers/operators
     # need to be added to an array(potentially of strings) into an array.
     #
     # To print
     # grab keywords from keywords.txt
+
     kwfile = open("keywords.txt")
     for line in kwfile:
         Keywords.append(line.strip())
@@ -40,13 +42,22 @@ def scanner(filePath):
         # open file located at filePath, assign to variable file
     file = open(filePath)
     descriptionComment = False
+    varNamesThere = False
 
     # for each syntax for every line in the file
     for line in file:
+
         varNameHere = False
 
         # splits lines into individual words
         lineList = line.split()
+
+        if len(lineList) == 0:
+            continue
+
+        if varNamesThere:
+            VariableNames.append(lineList[0])
+
         for word in lineList:
             # word.strip() gives us the word without whitespace, we can use this to compare against keywords, operators, variables
             stripped = word.strip()
@@ -63,6 +74,12 @@ def scanner(filePath):
 
             if stripped == "description":
                 descriptionComment = True
+
+            if stripped == "parameters":
+                varNamesThere = True
+
+            if stripped == "specifications":
+                varNamesThere = False
 
             # symbol and define are used to create a variable, so set the value after symbol, define, or method to a variable name
             if varNameHere:
@@ -84,11 +101,12 @@ def scanner(filePath):
             else:
                 print(stripped)
 
-    #prints the sequential K.O.I lists to see which words have been identified
-    print "Keywords Found: ", keyWordsFound , "\n"
-    print "Identifiers Found: ", variableNamesFound, "\n"
-    print "Operators Found: ", operatorsFound, "\n"
+    # prints the sequential K.O.I lists to see which words have been identified
+    print("\nKeywords Found: ", keyWordsFound, "\n")
+    print("Identifiers Found: ", variableNamesFound, "\n")
+    print("Operators Found: ", operatorsFound, "\n")
     return file.name
+
 
 # gets the name of the file and ends the function
 scanner("test.scl")
