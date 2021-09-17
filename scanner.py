@@ -24,6 +24,7 @@ def scanner(filePath):
 
     # open file located at filePath, assign to variable file
     file = open(filePath)
+    descriptionComment = False
 
     # for each syntax for every line in the file
     for line in file:
@@ -32,6 +33,19 @@ def scanner(filePath):
         for word in lineList:
             # word.strip() gives us the word without whitespace, we can use this to compare against keywords, operators, variables
             stripped = word.strip()
+
+            # singleline comments in this language start with "//"
+            if stripped == "//":
+                break
+
+            # multiline comments in this language start with "description" and end with "*/"
+            if descriptionComment:
+                if stripped == "*/":
+                    descriptionComment = False
+                continue
+
+            if stripped == "description":
+                descriptionComment = True
 
             if stripped in Keywords:
                 print("Keyword found: " + stripped)
