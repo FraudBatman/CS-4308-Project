@@ -31,7 +31,19 @@ def scanner(filePath):
         lineList = line.split()
         for word in lineList:
             # word.strip() gives us the word without whitespace, we can use this to compare against keywords, operators, variables
-            print(word.strip())
+            stripped = word.strip()
+
+            if stripped in Keywords:
+                print("Keyword found: " + stripped)
+                keyWordsFound.append(stripped)
+            elif stripped in Operators:
+                print("Operator found: " + stripped)
+                operatorsFound.append(stripped)
+            elif stripped in VariableNames:
+                print("Variable found:" + stripped)
+                variableNames.append(stripped)
+            else:
+                print(stripped)
 
     # gets the name of the file and ends the function
     return file.name
