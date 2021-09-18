@@ -130,10 +130,10 @@ def scanner(filePath):
 # gets the name of the file and ends the function
 txtFile = input("Type in a file: ")
 scanner(txtFile);
-scanner("test.scl")
-scanner("arduino_ex1.scl")
-scanner("arrayex1b.scl")
-scanner("bitops1.scl")
-scanner("datablistp.scl")
-scanner("linkedg.scl")
-scanner("welcome.scl")
+#scanner("test.scl")
+#scanner("arduino_ex1.scl")
+#scanner("arrayex1b.scl")
+#scanner("bitops1.scl")
+#scanner("datablistp.scl")
+#scanner("linkedg.scl")
+#scanner("welcome.scl")
