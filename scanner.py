@@ -3,6 +3,17 @@
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
 # (Syntax for Dictionary) <keep for now> keywordList = {"function": "def", "define": "="}
 
+# To print, we want the output to be
+# Keywords: kw1, kw2, kw3, kw4, kww5, kw6...
+# Identifiers: id1, id2, id3, id4, id5, id6...
+# Operators: o1, o2, o3, o4, o5, o6...
+#
+# To do so, the file needs to be scanned line by line, each word read, and the keywords/identifiers/operators
+# need to be added to an array(potentially of strings) into an array.
+#
+# To print
+# grab keywords from keywords.txt
+
 # Create 3 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
@@ -16,17 +27,6 @@ variableNamesFound = []
 
 # where filePath is a function parameter that's just a file name
 def scanner(filePath):
-    # To print, we want the output to be
-    # Keywords: kw1, kw2, kw3, kw4, kww5, kw6...
-    # Identifiers: id1, id2, id3, id4, id5, id6...
-    # Operators: o1, o2, o3, o4, o5, o6...
-    #
-    # To do so, the file needs to be scanned line by line, each word read, and the keywords/identifiers/operators
-    # need to be added to an array(potentially of strings) into an array.
-    #
-    # To print
-    # grab keywords from keywords.txt
-
     kwfile = open("keywords.txt")
     for line in kwfile:
         Keywords.append(line.strip())
@@ -59,7 +59,8 @@ def scanner(filePath):
             VariableNames.append(lineList[0])
 
         for word in lineList:
-            # word.strip() gives us the word without whitespace, we can use this to compare against keywords, operators, variables
+            # word.strip() gives us the word without whitespace, we can use this to compare 
+            # against keywords, operators, variables
             stripped = word.strip()
 
             # singleline comments in this language start with "//"
@@ -81,7 +82,8 @@ def scanner(filePath):
             if stripped == "specifications":
                 varNamesThere = False
 
-            # symbol and define are used to create a variable, so set the value after symbol, define, or method to a variable name
+            # symbol and define are used to create a variable, so set the value after symbol, 
+            # define, or method to a variable name
             if varNameHere:
                 VariableNames.append(stripped)
                 varNameHere = False
