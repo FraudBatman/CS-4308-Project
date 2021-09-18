@@ -124,7 +124,6 @@ def scanner(filePath):
     print ("Identifiers Found: ", variableNamesFound, "\n")
     print ("Operators Found: ", operatorsFound, "\n")
     print ("Constants Found: ", constantsFound, "\n")
-    print ("This is the end of the function")
     return file.name
 
 
