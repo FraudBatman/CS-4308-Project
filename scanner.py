@@ -121,10 +121,10 @@ def scanner(filePath):
                 print(stripped)
 
     # prints the sequential K.O.I lists to see which words have been identified
-    print("\nKeywords Found: ", keyWordsFound, "\n")
-    print("Identifiers Found: ", variableNamesFound, "\n")
-    print("Operators Found: ", operatorsFound, "\n")
-    print("Constants Found: ", constantsFound, "\n")
+    print ("\nKeywords Found: ", keyWordsFound, "\n")
+    print ("Identifiers Found: ", variableNamesFound, "\n")
+    print ("Operators Found: ", operatorsFound, "\n")
+    print ("Constants Found: ", constantsFound, "\n")
     return file.name
 
 
