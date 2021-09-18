@@ -124,12 +124,14 @@ def scanner(filePath):
     print ("Identifiers Found: ", variableNamesFound, "\n")
     print ("Operators Found: ", operatorsFound, "\n")
     print ("Constants Found: ", constantsFound, "\n")
+    print ("This is the end of the function")
     return file.name
 
 
 # gets the name of the file and ends the function
-txtFile = input("Type in a file: ")
+txtFile = input("Type in a file(insert quotation marks around the file): ")
 scanner(txtFile);
+
 #scanner("test.scl")
 #scanner("arduino_ex1.scl")
 #scanner("arrayex1b.scl")
