@@ -26,9 +26,10 @@ operatorsFound = []
 variableNamesFound = []
 constantsFound = []
 
-
+import sys
 # where filePath is a function parameter that's just a file name
 def scanner(filePath):
+    print(sys.version)
     kwfile = open("keywords.txt")
     for line in kwfile:
         Keywords.append(line.strip())
