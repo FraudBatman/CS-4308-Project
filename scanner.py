@@ -14,13 +14,13 @@
 # To print
 # grab keywords from keywords.txt
 
-# Create 3 lists to define the keywords, operators, and identifiers
+# Create 4 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
 VariableNames = []
 Constants = []
 
-# Create 3 lists to compile all the K.O.I found in the .scl files
+# Create 4 lists to compile all the K.O.I found in the .scl files
 keyWordsFound = []
 operatorsFound = []
 variableNamesFound = []
@@ -131,6 +131,7 @@ def scanner(filePath):
 txtFile = input("Type in a file(insert quotation marks around the file): ")
 scanner(txtFile);
 
+#Tested the files that were provided
 #scanner("test.scl")
 #scanner("arduino_ex1.scl")
 #scanner("arrayex1b.scl")
