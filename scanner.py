@@ -14,6 +14,8 @@
 # To print
 # grab keywords from keywords.txt
 
+import re
+
 # Create 4 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
@@ -79,8 +81,16 @@ def scanner(filePath):
                     descriptionComment = False
                 continue
 
-            #strings!
+            #strings! regular expressions! one of these is much simpler than the other!
             if stringyBoy:
+                continue
+            
+            #these match words that have a set of quotation marks
+            onestr = re.compile("'\S*'")
+            twostr = re.compile('"\S*"')
+
+            #so if the word is a whole string, skip it
+            if onestr.match(word) or twostr.match(word):
                 continue
 
             if '"' in stripped or "'" in stripped:
