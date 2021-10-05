@@ -14,8 +14,8 @@
 # To print
 # grab keywords from keywords.txt
 
-import re
 
+#Submission 1 
 # Create 4 lists to define the keywords, operators, and identifiers
 Keywords = []
 Operators = []
@@ -149,3 +149,5 @@ scanner(txtFile);
 #scanner("datablistp.scl")
 #scanner("linkedg.scl")
 #scanner("welcome.scl")
+
+
