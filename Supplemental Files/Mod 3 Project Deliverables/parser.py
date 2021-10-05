@@ -5,6 +5,6 @@
 # and builds a data structure (parse tree, abstract syntax tree or other hierarchical structure)
 # Giving a structural representation of the input while checking for correct syntax.
 # Refer to scl_grammar.txt for grammar
-import re
+import scanner
 
 class SCLParser(object)
