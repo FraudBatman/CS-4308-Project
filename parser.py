@@ -28,7 +28,7 @@ class Parser:
     def compile(self, input):
         self.lexier.analyzer(input) #Takes input and sends it to a lexier analyzer
         self.getNextToken()         #Gets the next token after the input
-        self.keywords()                 #Gets the expression from the input files
+        self.keywords()                 #Gets the keyword from the input files
 
     # Keywords function
     def keywords(self):
