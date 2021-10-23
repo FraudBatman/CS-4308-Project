@@ -1,39 +1,36 @@
 # CS 4308
 # Group Members:Sam Perez
 # Parser program to our scanner
-# The Parser takes input data (frequently text)
-# and builds a data structure (parse tree, abstract syntax tree or other hierarchical structure)
+# The Parser takes input data, typically a file, and builds tree or hierarchial structure
+
 # Giving a structural representation of the input while checking for correct syntax.
 # Refer to scl_grammar.txt for grammar
 # utilizes Lexier and Token from the lexier.py file
 
+#This parser is able to take any file as input text, we used "test.scl" as test input
+
 from lexier import Lexier
 from lexier import Token
 
-
+#Main class
 class Parser:
     lexier = Lexier()
     token = Token()
     nextToken = None
 
-    # def __init__(self, lexemeList):
+    # def __init__(self, lexemeList):   Constructor 
     def fileTime(self, filePath):
         file = open(filePath)
         for line in file:
             parser.compile(line)
 
 # Compile function
-    def compile(self, inputString):
-        self.lexier.analyzer(inputString)
+    def compile(self, input):
+        self.lexier.analyzer(input)
         self.getNextToken()
         self.expr()
-        # for i in range(0,len(self.lexier.lexemeList)):
-        # 	self.getNextToken()
-        #token = self.lexier.getNext()
-        #print("Next token is %s Next lexeme is %s" % (token.TYPE, token.VALUE))
 
-    # Expr function
-
+    # Expression function
     def expr(self):
         print("Enter <expr>")
         self.term()
@@ -42,8 +39,7 @@ class Parser:
             self.term()
         print("Exit <expr>")
 
-    # Term function
-
+    #Term function
     def term(self):
         print("Enter <term>")
         self.factor()
@@ -53,7 +49,6 @@ class Parser:
         print("Exit <term>")
 
     # Factor function
-
     def factor(self):
         print("Enter <factor>")
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
@@ -69,23 +64,23 @@ class Parser:
         print("Exit <factor>")
 
     # Get next token
-
     def getNextToken(self):
         self.nextToken = self.lexier.getNext()
 
     # Function to print error
-
     def error(self):
         print("Syntax error")
 
 
 parser = Parser()
 
-# get input for the file we gonna do the stuff with and things
-txtFile = input(
-    "Please Enter a file name (quotation marks are needed) ")
+# Method/Class to get input for the file
+txtFile = input("Type in a file(insert quotation marks around the file): ") 
+
+#The file is only sent to the parser method if it is not empty
+#This does not take nonexistance of a file into consideration
 if (txtFile == ""):
-    print("You have entered nothing, please enter a valid file")
+    print("Empty Input, Please input a valid file.")
 else:
     parser.fileTime(txtFile)
 
