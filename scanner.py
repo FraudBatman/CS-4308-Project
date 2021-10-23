@@ -86,8 +86,8 @@ def scanner(filePath):
                 continue
             
             #these match words that have a set of quotation marks
-            onestr = re.compile("'\S*'")
-            twostr = re.compile('"\S*"')
+            #onestr = re.compile("'\S*'")
+            #twostr = re.compile('"\S*"')
 
             #so if the word is a whole string, skip it
             if onestr.match(word) or twostr.match(word):

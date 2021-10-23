@@ -26,42 +26,42 @@ class Parser:
 
 # Compile function
     def compile(self, input):
-        self.lexier.analyzer(input)
-        self.getNextToken()
-        self.expr()
+        self.lexier.analyzer(input) #Takes input and sends it to a lexier analyzer
+        self.getNextToken()         #Gets the next token after the input
+        self.expr()                 #Gets the expression from the input files
 
     # Expression function
     def expr(self):
-        print("Enter <expr>")
-        self.term()
+        print("Entering <expr>")   #Prints to show that it was being tested as an expression
+        self.term() #Sends to the term function to determine if it is also a a term
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
-            self.getNextToken()
-            self.term()
-        print("Exit <expr>")
+            self.getNextToken() #If it is an expression, it will print the expression
+            self.term()         #It will also send to the term function
+        print("Exiting <expr>")
 
     #Term function
     def term(self):
-        print("Enter <term>")
-        self.factor()
+        print("Entering <term>")   #Prints to show that it was being tested as a term
+        self.factor() #Sends to the factor function to determine if this is also a function
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
-            self.getNextToken()
-            self.factor()
-        print("Exit <term>")
+            self.getNextToken()             #If it is a term, it will print the term
+            self.factor()                   #It will also send to the factor method 
+        print("Exiting <term>")                #Once all terms have been determined it will exit the term function
 
     # Factor function
-    def factor(self):
-        print("Enter <factor>")
+    def factor(self):      
+        print("Entering <factor>") #Prints to show that it was being tested as a factor
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
-            self.getNextToken()
+            self.getNextToken()     #Will get the next token if it is a factor
         else:
-            if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):
+            if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):  #If it isnt a factor it will get the next token and send to the expression function
                 self.getNextToken()
                 self.expr()
-                if(self.nextToken.TYPE == self.lexier.RIGHT_PAREN):
+                if(self.nextToken.TYPE == self.lexier.RIGHT_PAREN): 
                     self.getNextToken()
                 else:
                     self.error()
-        print("Exit <factor>")
+        print("Exiting <factor>")  #Once all terms have been determined it will exit the factor function
 
     # Get next token
     def getNextToken(self):
