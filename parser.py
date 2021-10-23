@@ -12,7 +12,7 @@
 from lexier import Lexier
 from lexier import Token
 
-#Main class
+#Main Parser class
 class Parser:
     lexier = Lexier()
     token = Token()
@@ -20,9 +20,9 @@ class Parser:
 
     # def __init__(self, lexemeList):   Constructor 
     def fileTime(self, filePath):
-        file = open(filePath)
-        for line in file:
-            parser.compile(line)
+        file = open(filePath)   #Opens the file sent in
+        for line in file:   #Compules the file line by line
+            parser.compile(line)    #Sends it to the parser file for compilation
 
 # Compile function
     def compile(self, input):
