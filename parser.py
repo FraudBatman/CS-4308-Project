@@ -5,6 +5,7 @@
 # and builds a data structure (parse tree, abstract syntax tree or other hierarchical structure)
 # Giving a structural representation of the input while checking for correct syntax.
 # Refer to scl_grammar.txt for grammar
+# utilizes Lexier and Token from the lexier.py file
 
 from lexier import Lexier
 from lexier import Token
@@ -89,5 +90,3 @@ else:
     parser.fileTime(txtFile)
 
 
-# We can test here :
-#parser.compile("(sum + 47) / total")
