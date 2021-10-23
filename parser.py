@@ -30,33 +30,33 @@ class Parser:
         self.getNextToken()         #Gets the next token after the input
         self.expr()                 #Gets the expression from the input files
 
-    # Expression function
-    def expr(self):
-        print("Entering <expr>")   #Prints to show that it was being tested as an expression
-        self.term() #Sends to the term function to determine if it is also a a term
+    # Keywords function
+    def keywords(self):
+        print("Entering <keywords>")   #Prints to show that it was being tested as a keyword
+        self.identifier() #Sends to the term function to determine if it is also a a term
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
-            self.getNextToken() #If it is an expression, it will print the expression
-            self.term()         #It will also send to the term function
-        print("Exiting <expr>")
+            self.getNextToken() #If it is a keyword, it will print the keyword
+            self.identifier()         #It will also send to the term function
+        print("Exiting <keywords>")
 
-    #Term function
-    def term(self):
-        print("Entering <term>")   #Prints to show that it was being tested as a term
-        self.factor() #Sends to the factor function to determine if this is also a function
+    #Identifier function
+    def identifer(self):
+        print("Entering <term>")   #Prints to show that it was being tested as an identifier
+        self.operator() #Sends to the operator function to determine if this is also an operator
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
-            self.getNextToken()             #If it is a term, it will print the term
-            self.factor()                   #It will also send to the factor method 
-        print("Exiting <term>")                #Once all terms have been determined it will exit the term function
+            self.getNextToken()             #If it is an identifier, it will print the term
+            self.operator()                   #It will also send to the operator method 
+        print("Exiting <term>")                #Once all identifiers have been determined it will exit the identifier function
 
-    # Factor function
-    def factor(self):      
-        print("Entering <factor>") #Prints to show that it was being tested as a factor
+    # Operators function
+    def operators(self):      
+        print("Entering <operators>") #Prints to show that it was being tested as an operator
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
-            self.getNextToken()     #Will get the next token if it is a factor
+            self.getNextToken()     #Will get the next token if it is an operator
         else:
-            if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):  #If it isnt a factor it will get the next token and send to the expression function
-                self.getNextToken()
-                self.expr()
+            if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):  #If it isnt an operator it will get the next token and send to the expression function
+                self.getNextToken()                             #get the next token and send to the keywords function
+                self.keywords()
                 if(self.nextToken.TYPE == self.lexier.RIGHT_PAREN): 
                     self.getNextToken()
                 else:
