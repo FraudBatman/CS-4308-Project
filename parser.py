@@ -36,7 +36,7 @@ class Parser:
         self.identifier() #Sends to the term function to determine if it is also an identifier
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
             self.getNextToken() #If it is a keyword, it will print the keyword
-            self.identifier()         #It will also send to the term function
+            self.identifier()         #It will also send to the identifier function
         print("Exiting <keywords>")
 
     #Identifier function
@@ -45,14 +45,14 @@ class Parser:
         self.operators() #Sends to the operator function to determine if this is also an operator
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
             self.getNextToken()             #If it is an identifier, it will print the term
-            self.operators()                   #It will also send to the operator method 
-        print("Exiting <term>")                #Once all identifiers have been determined it will exit the identifier function
+            self.operators()                #It will also send to the operator method 
+        print("Exiting <term>")             #Once all identifiers have been determined it will exit the identifier function
 
     # Operators function
     def operators(self):      
         print("Entering <operators>") #Prints to show that it was being tested as an operator
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
-            self.getNextToken()     #Will get the next token if it is an operator
+            self.getNextToken()       #Will get the next token if it is an operator
         else:
             if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):  #If it isnt an operator it will get the next token and send to the expression function
                 self.getNextToken()                             #get the next token and send to the keywords function
