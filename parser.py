@@ -33,14 +33,14 @@ class Parser:
     # Keywords function
     def keywords(self):
         print("Entering <keywords>")   #Prints to show that it was being tested as a keyword
-        self.identifier() #Sends to the term function to determine if it is also a a term
+        self.identifier() #Sends to the term function to determine if it is also an identifier
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
             self.getNextToken() #If it is a keyword, it will print the keyword
             self.identifier()         #It will also send to the term function
         print("Exiting <keywords>")
 
     #Identifier function
-    def identifer(self):
+    def identifier(self):
         print("Entering <term>")   #Prints to show that it was being tested as an identifier
         self.operator() #Sends to the operator function to determine if this is also an operator
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
