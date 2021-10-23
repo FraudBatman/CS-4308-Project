@@ -42,10 +42,10 @@ class Parser:
     #Identifier function
     def identifier(self):
         print("Entering <term>")   #Prints to show that it was being tested as an identifier
-        self.operator() #Sends to the operator function to determine if this is also an operator
+        self.operators() #Sends to the operator function to determine if this is also an operator
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
             self.getNextToken()             #If it is an identifier, it will print the term
-            self.operator()                   #It will also send to the operator method 
+            self.operators()                   #It will also send to the operator method 
         print("Exiting <term>")                #Once all identifiers have been determined it will exit the identifier function
 
     # Operators function
