@@ -1,5 +1,5 @@
 # CS 4308
-# Group Members: Nic Ott, Jason Paek, Sam Perez
+# Group Members:Sam Perez
 # Parser program to our scanner
 # The Parser takes input data (frequently text) 
 # and builds a data structure (parse tree, abstract syntax tree or other hierarchical structure)

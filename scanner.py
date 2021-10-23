@@ -1,5 +1,5 @@
 # CS 4308
-# Group Members: Nic Ott, Jason Paek, Sam Perez
+# Group Members:Sam Perez
 # to run this in a terminal, use the command "python -i scanner.py" in this directory
 # (Syntax for Dictionary) <keep for now> keywordList = {"function": "def", "define": "="}
 
