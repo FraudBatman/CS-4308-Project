@@ -90,8 +90,8 @@ def scanner(filePath):
             #twostr = re.compile('"\S*"')
 
             #so if the word is a whole string, skip it
-            if onestr.match(word) or twostr.match(word):
-                continue
+            #if onestr.match(word) or twostr.match(word):
+                #continue
 
             if '"' in stripped or "'" in stripped:
                 stringyBoy = not stringyBoy
