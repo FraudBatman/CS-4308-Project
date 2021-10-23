@@ -82,9 +82,9 @@ parser = Parser()
 
 # get input for the file we gonna do the stuff with and things
 txtFile = input(
-    "Gimme a file or I'll kill you're self-esteem (with quotatio mo) ")
+    "Please Enter a file name (quotation marks are needed) ")
 if (txtFile == ""):
-    print("you stinky")
+    print("You have entered nothing, please enter a valid file")
 else:
     parser.fileTime(txtFile)
 
