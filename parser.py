@@ -61,7 +61,7 @@ class Parser:
                     self.getNextToken()
                 else:
                     self.error()
-        print("Exiting <factor>")  #Once all terms have been determined it will exit the factor function
+        print("Exiting <operators>")  #Once all terms have been determined it will exit the operators function
 
     # Get next token
     def getNextToken(self):
