@@ -9,8 +9,7 @@
 
 #This parser is able to take any file as input text, we used "test.scl" as test input
 
-from lexier import Lexier
-from lexier import Token
+from lexier import *
 
 #Main Parser class
 class Parser:
