@@ -9,7 +9,7 @@
 
 #This parser is able to take any file as input text, we used "test.scl" as test input
 
-from lexier import *
+from scanner import *
 
 #Main Parser class
 class Parser:
