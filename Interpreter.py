@@ -1,8 +1,18 @@
 # CS 4308
-# Group Members: Nic Ott, Jason Paek, Sam Perez
+# Group Members:Sam Perez
 # This is our Interpreter program and it translates the tokens found by the scanner and organized by the parser
 # In other words it converts the tokens into executable instructions in the IDE
+#
+# This interpreter is incomplete and does not correctly provide the target output. However, concepts in this code 
+# are correct and can be utilized for conceptual knowledge, not implementation
+# The correct output for the interpretor are provided in a word document and the psuedocode for this interpretor are 
+# also provided in a separate word document. 
+#
+# The file used to test this interpeter is test.scl
 
+# Import all files created for the interpretor, scanner, node, and parser
+from scanner import *
+from node import *
 from parser import *
 
 class Interpreter(Parser):
