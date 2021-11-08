@@ -124,42 +124,42 @@ class Interpreter(Parser):
 
     # Returns return type token
     def interp_return(self, node):
-        lex = node.getScanLine().getLex()
+        lex = node.getScanLine().getLex() #scan each line
 
-        returnType = lex[len(lex)-1]
-        token_type = returnType.getToken()
+        returnType = lex[len(lex)-1]    #Determine the return type 
+        token_type = returnType.getToken()  #Determine the token type
 
-        return token_type
+        return token_type   #Return it
 
     # Interprets Keywords
     def interp_keys(self, node):
-        if node.getChildren() == None:
+        if node.getChildren() == None: #id the node has no children end the method
             return
-        for child in node.getChildren():
-            if child.getType() is Type.OPERATORS:
-                self.interp_ops(child)
+        for child in node.getChildren():    #Get the children
+            if child.getType() is Type.OPERATORS:   #Determine if it is an operator
+                self.interp_ops(child)  #Interpret the operator
 
     # Interprets operators
     def interp_ops(self, node):
-        if node.getChildren() == None:
+        if node.getChildren() == None: #if the node has no children, end there
             return
-        for child in node.getChildren():
-            if child.getType() is Type.CONST_DEC:
-                self.interp_const_declaration(child)
-            elif child.getType() is Type.IDENTIFIER:
-                self.interp_ident(child)
-            elif child.getType() is Type.PARENTHESIS:
-                self.interpret_parenthesis(child)
+        for child in node.getChildren():    #Get all the children
+            if child.getType() is Type.CONST_DEC:   #determine if it is a constant declaration
+                self.interp_const_declaration(child)#if so interpret it
+            elif child.getType() is Type.IDENTIFIER:#Determine if it is an identifier
+                self.interp_ident(child)            #If so interpret it 
+            elif child.getType() is Type.PARENTHESIS:   #Determine if it is a parenthesis
+                self.interpret_parenthesis(child)   #if so interpret it 
 
     # Interprets parenthesis operations
     def interpret_parenthesis(self, node):
-        for child in node.getChildren():
-            if child.getType() is Type.ACTION_DEF:
-                self.interpretActionDef(child)
+        for child in node.getChildren():    #Get the children
+            if child.getType() is Type.ACTION_DEF:  #determine if it is an action
+                self.interpretActionDef(child)  #Interpret it 
 
     # Interprets action_def
     def interpretActionDef(self, node):
-        lex = node.getScanLine().getLex()
+        lex = node.getScanLine().getLex()   #Scan the line to get the lexeme
 
         # If action is to SET
         if lex[0].getToken() is Token.SET:
