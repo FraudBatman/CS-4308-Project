@@ -68,6 +68,8 @@ class Interpreter(Parser):
         for child in node.getChildren():    #Get the children of the declaration(should only be one)
             if child.getType() is Type.CONST_LIST: #If the child is a constants list
                 self.interp_c_list(child)           # interpret it
+#####################################################################################################
+#####################################################################################################
 
     # constants 
     def interp_c_list(self, node):
@@ -80,6 +82,8 @@ class Interpreter(Parser):
         for child in node.getChildren():    #get the children of the identifiers
             if child.getType() is Type.VAR_LIST:    #if the child is a variable list
                 self.interpretVarList(child)    #interpret it
+#####################################################################################################
+#####################################################################################################
 
     # variable list
     def interpretVarList(self, node):
@@ -249,19 +253,18 @@ class Interpreter(Parser):
         exprResult = 0      #Solution to the expression
 
         for lexeme in explex:
-            if lexeme.getToken():
-                lexemeList.append(lexeme)
-            elif lexeme.getToken():
-                while len(operList) != 0 and precedence[operList[len(operList)-1]] <= precedence[lexeme.getLexStr()]:
-                    lexemeList.append(
-                        Lexeme(operList[len(operList)-1], Token.findToken(operList.pop())))
-                operList.append(lexeme.getLexStr())
+            if lexeme.getToken():   #if the token exists
+                lexemeList.append(lexeme)   #then append the token
+            elif lexeme.getToken(): #get the token 
+                while len(operList) != 0 and precedence[operList[len(operList)-1]] <= precedence[lexeme.getLexStr()]: #determine the precedence of the operation
+                    lexemeList.append(Lexeme(operList[len(operList)-1], Token.findToken(operList.pop()))) #append the list at a specific token
+                operList.append(lexeme.getLexStr()) #append the lexeme list at the string 
 
-        while len(operList) != 0:
-            lexemeList.append(
-                Lexeme(operList[len(operList) - 1], Token.findToken(operList.pop())))
+        while len(operList) != 0:   #While the list is not empty
+            lexemeList.append(Lexeme(operList[len(operList) - 1], Token.findToken(operList.pop()))) 
+            #append the list at a specific token
 
-        postList = []
+        postList = []   #List after appendages
 
         for lexeme in lexemeList:
             if lexeme.getToken() is Token.MULT:
