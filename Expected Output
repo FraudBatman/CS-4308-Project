@@ -1,0 +1,64 @@
+from scl import *
+
+MM = hex(0x45)
+NHG = hex(0x4524h)
+MYHV = hex(0x0ACDFh)
+MYSHV = hex(0x0F5h)
+
+
+def max_array(a, num_elements)
+    i = 0
+    max_elem = 0
+    hh = 0
+    i = 1
+    Max_elem = a[0]
+    while i < num_elements:
+        If a[i] > max_elem:
+            max_elem = a[i]
+            hh = pow(varm2[i],3)
+        i += 1
+    return max_elem
+
+week = [Monday, Tuesday, Wednesday]
+
+Class stname
+Xcoord = 0.0
+Ycoord = 0.0
+Title = []
+
+MAX = 45
+ARRAY_SIZE = 50
+varm2  = [None] * MM
+var3 = 2154.55e05
+strname = stname()
+Var = week[]
+
+def main
+    marray = [None] * MAX
+    max_val = 0
+    kelements = 0
+    j = 0
+    mybhvar = 0
+    myihvar = 0
+    xc = 0
+
+    mybhvar = hex(0x0ADH)
+    myihvar = hex(0xMYHV)
+    mybhvar = hex(0xMYSHV)
+    mybhvar = mybhvar << 2
+    kelements = input(“Number of elements to process”)
+    for j in kelements:
+        marray[j] = input(“Enter element int value: “)
+
+
+    max_val = max_array(marray, kelements)
+    print(“Max Integer found “ + max_val) 
+    xc = strname.xcoord
+    print(“xc: “, xc)
+    quit()
+    
+
+
+
+
+

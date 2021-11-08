@@ -200,6 +200,7 @@ class Interpreter(Parser):
                 valueListTxt = self.interp_pvar_list((child))
                 print(valueListTxt)
 
+
     # Interprets p_var_value_list and returns a list of values
     def interp_pvar_list(self, node):
         lineLexems = node.getScanLine().getLex()
@@ -209,24 +210,28 @@ class Interpreter(Parser):
 
         for lexeme in valueListlex:
             # Compares if token is not a string literal 
-            if lexeme.getToken().getNumCode() in (2, 3, 5, 6, 7, 9):
+            if lexeme.getToken().getNumCode():
                 returnString += str(self.getVarValue(lexeme.getLexStr()))
             # Compares if it is string ident or const string ident 
-            elif lexeme.getToken().getNumCode() in (4, 8):
-                returnString += str(self.getLitStr(
-                    self.getVarValue(lexeme.getLexStr())))
+            elif lexeme.getToken().getNumCode():
+                returnString += str(self.getLitStr(self.getVarValue(lexeme.getLexStr())))
             # Compares if a token is not a string literal
-            elif lexeme.getToken().getNumCode() in (10, 11, 13):
+            elif lexeme.getToken().getNumCode():
                 returnString += str(lexeme.getLexStr())
             # Compares if a token is a string literal
             elif lexeme.getToken() is Token.STRING_LITERAL:
                 returnString += str(self.getLitStr(lexeme.getLexStr()))
         return returnString
 
+#####################################################################################################
+#####################################################################################################
+
     # Returns string value which excludes the quotes and comma
     def getLitStr(self, lextr):
-        result = re.search("\"(.*)\"", lextr)
+        result = re.search("\"(.*)\"", lextr) #Uses regular expressions to find the literal string
         return result.group(1)
+#####################################################################################################
+#####################################################################################################
 
     # Interprets exp node and returns expression value
     def interp_exprs(self, node):
@@ -244,9 +249,9 @@ class Interpreter(Parser):
         exprResult = 0      #Solution to the expression
 
         for lexeme in explex:
-            if lexeme.getToken().getNumCode() in (2, 3, 6, 7, 10, 11):
+            if lexeme.getToken():
                 lexemeList.append(lexeme)
-            elif lexeme.getToken().getNumCode() in (25, 26, 27, 28):
+            elif lexeme.getToken():
                 while len(operList) != 0 and precedence[operList[len(operList)-1]] <= precedence[lexeme.getLexStr()]:
                     lexemeList.append(
                         Lexeme(operList[len(operList)-1], Token.findToken(operList.pop())))
@@ -271,6 +276,9 @@ class Interpreter(Parser):
                 postList.append(lexeme.getLexStr())
         return postList.pop()
 
+#####################################################################################################
+#####################################################################################################
+
     # Multiplies the two top elements in postList
     def multiplication(self, postList):
         v2 = postList.pop()
@@ -279,19 +287,19 @@ class Interpreter(Parser):
         x2 = None
 
         # Find value of first variable
-        if Token.findToken(v1) is Token.LITERALINT:
-            x1 = int(v1)
-        elif Token.findToken(v1) is Token.LITERALFLOAT:
-            x1 = float(v1)
+        if Token.findToken(v1) is Token.LITERALINT:     #If the token is an integer
+            x1 = int(v1)                #Set it equal to x1
+        elif Token.findToken(v1) is Token.LITERALFLOAT:     #If it is a float
+            x1 = float(v1)          #Set it to x1
         else:
-            v1Type = self.getVarType(v1)
-            if v1Type is Token.INTEGER:
-                x1 = int(self.getVarValue(v1))
-            elif v1Type is Token.FLOAT:
-                x1 = float(self.getVarValue(v1))
+            v1Type = self.getVarType(v1)        #get variable type
+            if v1Type is Token.INTEGER:     #If it is an int
+                x1 = int(self.getVarValue(v1))  #set it to x1
+            elif v1Type is Token.FLOAT: #If it is a float
+                x1 = float(self.getVarValue(v1))    #set it to x1
 
         # Find value of second variable
-        if Token.findToken(v2) is Token.LITERALINT:
+        if Token.findToken(v2) is Token.LITERALINT:     #Repeat the same process for x2
             x2 = int(v2)
         elif Token.findToken(v2) is Token.LITERALFLOAT:
             x2 = float(v2)
@@ -301,10 +309,11 @@ class Interpreter(Parser):
                 x2 = int(self.getVarValue(v2))
             elif v2Type is Token.FLOAT:
                 x2 = float(self.getVarValue(v2))
-
-        result = x1 * x2
-        postList.append(str(result))
-
+                    
+        result = x1 * x2        #Multiply the two numbers
+        postList.append(str(result))    #add it to the results list
+#####################################################################################################
+#####################################################################################################
     # Divides the two top elements in postList
     def division(self, postList):
         v2 = postList.pop()
@@ -410,6 +419,9 @@ class Interpreter(Parser):
         result = x1 * x2
         postList.append(str(result))
 
+#####################################################################################################
+#####################################################################################################
+
     # Looks up the stored value of the variable identity lexeme
     def getVarValue(self, varIdent):
         varVal = None
@@ -424,6 +436,9 @@ class Interpreter(Parser):
             varVal = self.cons_input[str(varIdent)][0]
 
         return varVal
+
+#####################################################################################################
+#####################################################################################################
 
     # Looks up the stored type of the variable identity lexeme
     def getVarType(self, varIdent):
