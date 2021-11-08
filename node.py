@@ -3,11 +3,11 @@ from enum import Enum
 class Node:
 
 	# Constructor
-	def __init__(self, parent, scanLine, nodeType):
+	def __init__(self, parent, scanLine, Type):
 		self.parent = parent
 		self.children = None
 		self.scanLine = scanLine
-		self.nodeType = nodeType
+		self.Type = Type
 
 	# Getter Methods for all fields
 	def getParent(self):
@@ -20,7 +20,7 @@ class Node:
 		return self.scanLine
 
 	def getType(self):
-		return self.nodeType
+		return self.Type
 
 	# Setter Methods for all fields
 	def setParent(self, parent):
@@ -32,8 +32,8 @@ class Node:
 	def setScanLine(self, scanLine):
 		self.scanLine = scanLine
 
-	def setType(self, nodeType):
-		self.nodeType = nodeType
+	def setType(self, Type):
+		self.Type = Type
 
 	# Adds node object to children list
 	def add_c_node(self, child):
@@ -62,7 +62,7 @@ class Node:
 
 
 
-class NodeType(Enum):
+class Type(Enum):
 
 	PROGRAM = "<program>"
 	IMPORT = "<import_stmnt>"
@@ -80,4 +80,4 @@ class NodeType(Enum):
 	PACTIONS = "<pactions>"
 	ACTION_DEF = "<action_def>"
 	EXP = "<exp>"
-	PVAR_VALUE_LIST = "<p_var_value_list>"
+	PVAR_LIST = "<p_var_list>"

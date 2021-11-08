@@ -22,7 +22,7 @@ class Parser:
 
     # def __init__(self, lexemeList):   Constructor
     def fileTime(self, filePath):
-        root = Node(None, None, NodeType.PROGRAM)
+        root = Node(None, None, Type.PROGRAM)
         file = open(filePath)  # Opens the file sent in
         for line in file:  # Compules the file line by line
             self.compile(line, root)  # Sends it to the parser file for compilation
@@ -32,7 +32,7 @@ class Parser:
     def compile(self, input, root):
         # Takes input and sends it to a lexier analyzer
         layer = 1
-        root.addChildNode(Node(root, layer, NodeType.IMPLEMENT)) #creates the node for the start of the line
+        root.addChildNode(Node(root, layer, Type.IMPLEMENT)) #creates the node for the start of the line
         self.lexier.analyzer(input)
         self.getNextToken()  # Gets the next token after the input
         self.keywords(root.getChildren()[-1], layer)  # Gets the keyword from the input files
@@ -45,7 +45,7 @@ class Parser:
         self.identifier(node, layer)  # Sends to the term function to determine if it is also an identifier
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
             self.getNextToken()  # If it is a keyword, it will print the keyword
-            node.addChildNode(Node(node, layer, NodeType.KEYWORDS)) #adds the keyword as a child of the parent node
+            node.addChildNode(Node(node, layer, Type.KEYWORDS)) #adds the keyword as a child of the parent node
             children = node.getChildren()
             self.identifier(children[-1], layer)  # It will also send to the identifier function
         print("Exiting <keywords>")
@@ -58,7 +58,7 @@ class Parser:
         self.operators(node, layer)  # Sends to the operator function to determine if this is also an operator
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
             self.getNextToken()  # If it is an identifier, it will print the term
-            node.addChildNode(Node(node,layer,NodeType.IDENTIFIER)) #adds the identifer as a child of the parent node
+            node.addChildNode(Node(node,layer,Type.IDENTIFIER)) #adds the identifer as a child of the parent node
             children = node.getChildren()
             self.operators(children[0], layer)  # It will also send to the operator method
         # Once all identifiers have been determined it will exit the identifier function
@@ -71,16 +71,16 @@ class Parser:
         print("Entering <operators>")
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
             self.getNextToken()  # Will get the next token if it is an operator
-            node.addChildNode(Node (node, layer, NodeType.OPERATORS)) #adds the operator as a child of the parent node
+            node.addChildNode(Node (node, layer, Type.OPERATORS)) #adds the operator as a child of the parent node
         else:
             # If it isnt an operator it will get the next token and send to the expression function
             if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):
                 self.getNextToken()  # get the next token and send to the keywords function
-                node.addChildNode(Node (node, layer, NodeType.OPERATORS))
+                node.addChildNode(Node (node, layer, Type.OPERATORS))
                 self.keywords(node.getChildren()[-1], layer)
                 if(self.nextToken.TYPE == self.lexier.RIGHT_PAREN):
                     self.getNextToken()
-                    node.addChildNode(Node (node, layer, NodeType.OPERATORS))
+                    node.addChildNode(Node (node, layer, Type.OPERATORS))
                 else:
                     self.error()
         # Once all terms have been determined it will exit the operators function

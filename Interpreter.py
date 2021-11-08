@@ -33,205 +33,204 @@ class Interpreter(Parser):
         print("\nFinished Parsing SCL File")
         print("="*50, "\n")
 
-        # Run through all the node's direct children
+        # Switch statement to run through all the node's direct children
         for node in parseTree.getChildren():
-            if node.getType() is NodeType.IMPORT:
+            if node.getType() is Type.IMPORT:
                 pass
-            elif node.getType() is NodeType.SYMBOL:
+            elif node.getType() is Type.SYMBOL:
                 pass
-            elif node.getType() is NodeType.GLOBALS:
-                self.interpretGlobals(node)
-            elif node.getType() is NodeType.IMPLEMENT:
-                self.interpretImplement(node)
+            elif node.getType() is Type.GLOBALS:
+                self.interp_default(node)
+            elif node.getType() is Type.IMPLEMENT:
+                self.interp_imp(node)
 
-    # Interprets globals
-    def interpretGlobals(self, node):
+    # Interprets default tokens
+    def interp_default(self, node):
         for child in node.getChildren():
-            if child.getType() is NodeType.CONST_DEC:
-                self.interpretConstDec(child)
-            elif child.getType() is NodeType.IDENTIFIER:
-                self.interpretIdentifer(child)
+            if child.getType() is Type.CONST_DEC:
+                self.interp_const_declaration(child)
+            elif child.getType() is Type.IDENTIFIER:
+                self.interp_ident(child)
 
-    # Interprets implement
-    def interpretImplement(self, node):
+    # Interprets implementation
+    def interp_imp(self, node):
         if node.getChildren() == None:
             return
         for child in node.getChildren():
-            if child.getType() is NodeType.KEYWORDS:
-                self.interpretKeywords(child)
+            if child.getType() is Type.KEYWORDS:
+                self.interp_keys(child)
 
     # Interprets const_dec
-    def interpretConstDec(self, node):
+    def interp_const_declaration(self, node):
         # There should only be one child of <const_dec>
         for child in node.getChildren():
-            if child.getType() is NodeType.CONST_LIST:
-                self.interpretConstList(child)
+            if child.getType() is Type.CONST_LIST:
+                self.interp_c_list(child)
 
     # Interprets const_list
-    def interpretConstList(self, node):
+    def interp_c_list(self, node):
         for child in node.getChildren():
-            if child.getType() is NodeType.COMP_DECLARE:
-                self.interpretCompDeclare(child)
+            if child.getType() is Type.COMP_DECLARE:
+                self.interp_comp_dec(child)
 
     # Interprets indentifier
-    def interpretIdentifer(self, node):
+    def interp_ident(self, node):
         # There should only be one child of <identifier>
         for child in node.getChildren():
-            if child.getType() is NodeType.VAR_LIST:
+            if child.getType() is Type.VAR_LIST:
                 self.interpretVarList(child)
 
     # Interprets var_list
     def interpretVarList(self, node):
         for child in node.getChildren():
-            if child.getType() is NodeType.COMP_DECLARE:
-                self.interpretCompDeclare(child)
+            if child.getType() is Type.COMP_DECLARE:
+                self.interp_comp_dec(child)
 
     # Interprets comp_declare
-    def interpretCompDeclare(self, node):
+    def interp_comp_dec(self, node):
         parent = node.getParent()
-        greatGrandparent = parent.getParent().getParent()
+        third_parent = parent.getParent().getParent()
 
-        isConstant = True if parent.getType() is NodeType.CONST_LIST else False
-        isGlobal = True if greatGrandparent.getType() is NodeType.GLOBALS else False
+        isConstant = True if parent.getType() is Type.CONST_LIST else False
+        isDefault = True if third_parent.getType() is Type.GLOBALS else False
 
-        lexemes = node.getScanLine().getLexemes()
+        lex = node.getScanLine().getLex()
         token_type = None
 
         for child in node.getChildren():
-            if child.getType() is NodeType.RET_TYPE:
-                token_type = self.interpretRetType(child)
+            if child.getType() is Type.RET_TYPE:
+                token_type = self.interp_return(child)
 
-        if isGlobal is True:
+        if isDefault is True:
             if isConstant is True:
-                self.cons[lexemes[1].getLexemeString()] = [
-                    lexemes[3].getLexemeString(), token_type]
+                self.cons[lex[1].getLexStr()] = [
+                    lex[3].getLexStr(), token_type]
             else:
-                self.vars[lexemes[1].getLexemeString()] = [
+                self.vars[lex[1].getLexStr()] = [
                     "", token_type]
         else:
             if isConstant is True:
-                self.cons_input[lexemes[1].getLexemeString()] = [
-                    lexemes[3].getLexemeString(), token_type]
+                self.cons_input[lex[1].getLexStr()] = [
+                    lex[3].getLexStr(), token_type]
             else:
-                self.var_input[lexemes[1].getLexemeString()] = [
+                self.var_input[lex[1].getLexStr()] = [
                     "", token_type]
 
     # Returns return type token
-    def interpretRetType(self, node):
-        lexemes = node.getScanLine().getLexemes()
+    def interp_return(self, node):
+        lex = node.getScanLine().getLex()
 
-        returnType = lexemes[len(lexemes)-1]
+        returnType = lex[len(lex)-1]
         token_type = returnType.getToken()
 
         return token_type
 
     # Interprets Keywords
-    def interpretKeywords(self, node):
+    def interp_keys(self, node):
         if node.getChildren() == None:
             return
         for child in node.getChildren():
-            if child.getType() is NodeType.OPERATORS:
-                self.interpretOperators(child)
+            if child.getType() is Type.OPERATORS:
+                self.interp_ops(child)
 
     # Interprets operators
-    def interpretOperators(self, node):
+    def interp_ops(self, node):
         if node.getChildren() == None:
             return
         for child in node.getChildren():
-            if child.getType() is NodeType.CONST_DEC:
-                self.interpretConstDec(child)
-            elif child.getType() is NodeType.IDENTIFIER:
-                self.interpretIdentifer(child)
-            elif child.getType() is NodeType.PACTIONS:
+            if child.getType() is Type.CONST_DEC:
+                self.interp_const_declaration(child)
+            elif child.getType() is Type.IDENTIFIER:
+                self.interp_ident(child)
+            elif child.getType() is Type.PACTIONS:
                 self.interpretPActions(child)
 
     # Interprets pactions
     def interpretPActions(self, node):
         for child in node.getChildren():
-            if child.getType() is NodeType.ACTION_DEF:
+            if child.getType() is Type.ACTION_DEF:
                 self.interpretActionDef(child)
 
     # Interprets action_def
     def interpretActionDef(self, node):
-        lexemes = node.getScanLine().getLexemes()
+        lex = node.getScanLine().getLex()
 
         # If action is to SET
-        if lexemes[0].getToken() is Token.SET:
-            if lexemes[1].getLexemeString() in self.vars:
-                expResult = None
+        if lex[0].getToken() is Token.SET:
+            if lex[1].getLexStr() in self.vars:
+                expr_result = None
                 for child in node.getChildren():
-                    if child.getType() is NodeType.EXP:
-                        expResult = self.interpretExp(child)
-                        self.vars[lexemes[1].getLexemeString(
-                        )][0] = expResult
-            elif lexemes[1].getLexemeString() in self.var_input:
-                expResult = None
+                    if child.getType() is Type.EXP:
+                        expr_result = self.interp_exprs(child)
+                        self.vars[lex[1].getLexStr(
+                        )][0] = expr_result
+            elif lex[1].getLexStr() in self.var_input:
+                expr_result = None
                 for child in node.getChildren():
-                    if child.getType() is NodeType.EXP:
-                        expResult = self.interpretExp(child)
-                        self.var_input[lexemes[1].getLexemeString(
-                        )][0] = expResult
-            elif lexemes[1].getLexemeString() in (self.cons, self.cons_input):
-                print("ERROR: Constant variable cannot be changed!")
+                    if child.getType() is Type.EXP:
+                        expr_result = self.interp_exprs(child)
+                        self.var_input[lex[1].getLexStr(
+                        )][0] = expr_result
+            elif lex[1].getLexStr() in (self.cons, self.cons_input):
+                print("Cannot change constant variables.")
             else:
-                print("ERROR: Variable not found!")
+                print("Variable does not exist.")
 
         # If action is to INPUT
-        elif lexemes[0].getToken() is Token.INPUT:
-            if lexemes[1].getToken() is Token.STRING_LITERAL:
-                if self.getVarType(lexemes[2].getLexemeString()) is not None:
-                    if lexemes[2].getLexemeString() in self.vars:
-                        self.vars[lexemes[2].getLexemeString()][0] = input(
-                            self.getLiteralString(lexemes[1].getLexemeString()))
-                    elif lexemes[2].getLexemeString() in self.var_input:
-                        self.var_input[lexemes[2].getLexemeString()][0] = input(
-                            self.getLiteralString(lexemes[1].getLexemeString()))
-                    elif lexemes[2].getLexemeString() in (self.cons, self.cons_input):
-                        print("ERROR: Constant Variable cannot be changed!")
+        elif lex[0].getToken() is Token.INPUT:
+            if lex[1].getToken() is Token.STRING_LITERAL:
+                if self.getVarType(lex[2].getLexStr()) is not None:
+                    if lex[2].getLexStr() in self.vars:
+                        self.vars[lex[2].getLexStr()][0] = input(
+                            self.getLitStr(lex[1].getLexStr()))
+                    elif lex[2].getLexStr() in self.var_input:
+                        self.var_input[lex[2].getLexStr()][0] = input(
+                            self.getLitStr(lex[1].getLexStr()))
+                    elif lex[2].getLexStr() in (self.cons, self.cons_input):
+                        print("Constant variables cannot be changed.")
                     else:
-                        print("ERROR: Variable not found!")
+                        print("Variable does not exist.")
 
         # If action is to DISPLAY
-        elif lexemes[0].getToken() is Token.DISPLAY:
+        elif lex[0].getToken() is Token.DISPLAY:
             # Should only be one child
             for child in node.getChildren():
-                valueListTxt = self.interpretPVarValueList((child))
+                valueListTxt = self.interp_pvar_list((child))
                 print(valueListTxt)
 
     # Interprets p_var_value_list and returns a list of values
-    def interpretPVarValueList(self, node):
-        allLexemesOnLine = node.getScanLine().getLexemes()
+    def interp_pvar_list(self, node):
+        lineLexems = node.getScanLine().getLex()
 
-        valueListLexemes = allLexemesOnLine[1:len(allLexemesOnLine)]
-        printString = ""
+        valueListlex = lineLexems[1:len(lineLexems)]
+        returnString = ""
 
-        for lexeme in valueListLexemes:
+        for lexeme in valueListlex:
             # Compares if token is not a string literal 
             if lexeme.getToken().getNumCode() in (2, 3, 5, 6, 7, 9):
-                printString += str(self.getVarValue(lexeme.getLexemeString()))
+                returnString += str(self.getVarValue(lexeme.getLexStr()))
             # Compares if it is string ident or const string ident 
             elif lexeme.getToken().getNumCode() in (4, 8):
-                printString += str(self.getLiteralString(
-                    self.getVarValue(lexeme.getLexemeString())))
+                returnString += str(self.getLitStr(
+                    self.getVarValue(lexeme.getLexStr())))
             # Compares if a token is not a string literal
             elif lexeme.getToken().getNumCode() in (10, 11, 13):
-                printString += str(lexeme.getLexemeString())
+                returnString += str(lexeme.getLexStr())
             # Compares if a token is a string literal
             elif lexeme.getToken() is Token.STRING_LITERAL:
-                printString += str(self.getLiteralString(lexeme.getLexemeString()))
-
-        return printString
+                returnString += str(self.getLitStr(lexeme.getLexStr()))
+        return returnString
 
     # Returns string value which excludes the quotes and comma
-    def getLiteralString(self, lexemeStr):
-        result = re.search("\"(.*)\"", lexemeStr)
+    def getLitStr(self, lextr):
+        result = re.search("\"(.*)\"", lextr)
         return result.group(1)
 
     # Interprets exp node and returns expression value
-    def interpretExp(self, node):
-        allLexemesOnLine = node.getScanLine().getLexemes()
+    def interp_exprs(self, node):
+        lineLexems = node.getScanLine().getLex()
 
-        expLexemes = allLexemesOnLine[3:len(allLexemesOnLine)]
+        explex = lineLexems[3:len(lineLexems)]
 
         # Create a precedence for operands
         precedence = {"*": 1, "/": 1, "+": 2, "-": 2}
@@ -242,174 +241,172 @@ class Interpreter(Parser):
         index = 0
         exprResult = 0
 
-        for lexeme in expLexemes:
+        for lexeme in explex:
             if lexeme.getToken().getNumCode() in (2, 3, 6, 7, 10, 11):
                 lexemeList.append(lexeme)
             elif lexeme.getToken().getNumCode() in (25, 26, 27, 28):
-                while len(operList) != 0 and precedence[operList[len(operList)-1]] <= precedence[lexeme.getLexemeString()]:
+                while len(operList) != 0 and precedence[operList[len(operList)-1]] <= precedence[lexeme.getLexStr()]:
                     lexemeList.append(
                         Lexeme(operList[len(operList)-1], Token.findToken(operList.pop())))
-                operList.append(lexeme.getLexemeString())
+                operList.append(lexeme.getLexStr())
 
         while len(operList) != 0:
             lexemeList.append(
                 Lexeme(operList[len(operList) - 1], Token.findToken(operList.pop())))
 
-        postFixList = []
+        postList = []
 
         for lexeme in lexemeList:
-            if lexeme.getToken() is Token.MUL_OPERATOR:
-                self.mulOper(postFixList)
-            elif lexeme.getToken() is Token.DIV_OPERATOR:
-                self.divOper(postFixList)
-            elif lexeme.getToken() is Token.ADD_OPERATOR:
-                self.addOper(postFixList)
-            elif lexeme.getToken() is Token.SUB_OPERATOR:
-                self.subOper(postFixList)
+            if lexeme.getToken() is Token.MULT:
+                self.multiplication(postList)
+            elif lexeme.getToken() is Token.DIV:
+                self.division(postList)
+            elif lexeme.getToken() is Token.ADD:
+                self.addition(postList)
+            elif lexeme.getToken() is Token.SUB:
+                self.subtraction(postList)
             else:
-                postFixList.append(lexeme.getLexemeString())
+                postList.append(lexeme.getLexStr())
+        return postList.pop()
 
-        return postFixList.pop()
-
-    # Multiplies the two top elements in postFixList
-    def mulOper(self, postFixList):
-        varTwo = postFixList.pop()
-        varOne = postFixList.pop()
-
-        valOne = None
-        valTwo = None
+    # Multiplies the two top elements in postList
+    def multiplication(self, postList):
+        v2 = postList.pop()
+        v1 = postList.pop()
+        x1 = None
+        x2 = None
 
         # Find value of first variable
-        if Token.findToken(varOne) is Token.INTEGER_LITERAL:
-            valOne = int(varOne)
-        elif Token.findToken(varOne) is Token.FLOAT_LITERAL:
-            valOne = float(varOne)
+        if Token.findToken(v1) is Token.LITERALINT:
+            x1 = int(v1)
+        elif Token.findToken(v1) is Token.LITERALFLOAT:
+            x1 = float(v1)
         else:
-            varOneType = self.getVarType(varOne)
-            if varOneType is Token.INTEGER:
-                valOne = int(self.getVarValue(varOne))
-            elif varOneType is Token.FLOAT:
-                valOne = float(self.getVarValue(varOne))
+            v1Type = self.getVarType(v1)
+            if v1Type is Token.INTEGER:
+                x1 = int(self.getVarValue(v1))
+            elif v1Type is Token.FLOAT:
+                x1 = float(self.getVarValue(v1))
 
         # Find value of second variable
-        if Token.findToken(varTwo) is Token.INTEGER_LITERAL:
-            valTwo = int(varTwo)
-        elif Token.findToken(varTwo) is Token.FLOAT_LITERAL:
-            valTwo = float(varTwo)
+        if Token.findToken(v2) is Token.LITERALINT:
+            x2 = int(v2)
+        elif Token.findToken(v2) is Token.LITERALFLOAT:
+            x2 = float(v2)
         else:
-            varTwoType = self.getVarType(varTwo)
-            if varTwoType is Token.INTEGER:
-                valTwo = int(self.getVarValue(varTwo))
-            elif varTwoType is Token.FLOAT:
-                valTwo = float(self.getVarValue(varTwo))
+            v2Type = self.getVarType(v2)
+            if v2Type is Token.INTEGER:
+                x2 = int(self.getVarValue(v2))
+            elif v2Type is Token.FLOAT:
+                x2 = float(self.getVarValue(v2))
 
-        result = valOne * valTwo
-        postFixList.append(str(result))
+        result = x1 * x2
+        postList.append(str(result))
 
-    # Divides the two top elements in postFixList
-    def divOper(self, postFixList):
-        varTwo = postFixList.pop()
-        varOne = postFixList.pop()
+    # Divides the two top elements in postList
+    def division(self, postList):
+        v2 = postList.pop()
+        v1 = postList.pop()
 
-        valOne = None
-        valTwo = None
+        x1 = None
+        x2 = None
 
         # Find value of first variable
-        if Token.findToken(varOne) is Token.INTEGER_LITERAL:
-            valOne = int(varOne)
-        elif Token.findToken(varOne) is Token.FLOAT_LITERAL:
-            valOne = float(varOne)
+        if Token.findToken(v1) is Token.LITERALINT:
+            x1 = int(v1)
+        elif Token.findToken(v1) is Token.LITERALFLOAT:
+            x1 = float(v1)
         else:
-            varOneType = self.getVarType(varOne)
-            if varOneType is Token.INTEGER:
-                valOne = int(self.getVarValue(varOne))
-            elif varOneType is Token.FLOAT:
-                valOne = float(self.getVarValue(varOne))
+            v1Type = self.getVarType(v1)
+            if v1Type is Token.INTEGER:
+                x1 = int(self.getVarValue(v1))
+            elif v1Type is Token.FLOAT:
+                x1 = float(self.getVarValue(v1))
 
         # Find value of second variable
-        if Token.findToken(varTwo) is Token.INTEGER_LITERAL:
-            valTwo = int(varTwo)
-        elif Token.findToken(varTwo) is Token.FLOAT_LITERAL:
-            valTwo = float(varTwo)
+        if Token.findToken(v2) is Token.LITERALINT:
+            x2 = int(v2)
+        elif Token.findToken(v2) is Token.LITERALFLOAT:
+            x2 = float(v2)
         else:
-            varTwoType = self.getVarType(varTwo)
-            if varTwoType is Token.INTEGER:
-                valTwo = int(self.getVarValue(varTwo))
-            elif varTwoType is Token.FLOAT:
-                valTwo = float(self.getVarValue(varTwo))
+            v2Type = self.getVarType(v2)
+            if v2Type is Token.INTEGER:
+                x2 = int(self.getVarValue(v2))
+            elif v2Type is Token.FLOAT:
+                x2 = float(self.getVarValue(v2))
 
-        result = valOne / valTwo
-        postFixList.append(str(result))
+        result = x1 / x2
+        postList.append(str(result))
 
-    # Adds the two top elements in postFixList
-    def addOper(self, postFixList):
-        varTwo = postFixList.pop()
-        varOne = postFixList.pop()
+    # Adds the two top elements in postList
+    def addition(self, postList):
+        v2 = postList.pop()
+        v1 = postList.pop()
 
-        valOne = None
-        valTwo = None
+        x1 = None
+        x2 = None
 
         # Find value of first variable
-        if Token.findToken(varOne) is Token.INTEGER_LITERAL:
-            valOne = int(varOne)
-        elif Token.findToken(varOne) is Token.FLOAT_LITERAL:
-            valOne = float(varOne)
+        if Token.findToken(v1) is Token.LITERALINT:
+            x1 = int(v1)
+        elif Token.findToken(v1) is Token.LITERALFLOAT:
+            x1 = float(v1)
         else:
-            varOneType = self.getVarType(varOne)
-            if varOneType is Token.INTEGER:
-                valOne = int(self.getVarValue(varOne))
-            elif varOneType is Token.FLOAT:
-                valOne = float(self.getVarValue(varOne))
+            v1Type = self.getVarType(v1)
+            if v1Type is Token.INTEGER:
+                x1 = int(self.getVarValue(v1))
+            elif v1Type is Token.FLOAT:
+                x1 = float(self.getVarValue(v1))
 
         # Find value of second variable
-        if Token.findToken(varTwo) is Token.INTEGER_LITERAL:
-            valTwo = int(varTwo)
-        elif Token.findToken(varTwo) is Token.FLOAT_LITERAL:
-            valTwo = float(varTwo)
+        if Token.findToken(v2) is Token.LITERALINT:
+            x2 = int(v2)
+        elif Token.findToken(v2) is Token.LITERALFLOAT:
+            x2 = float(v2)
         else:
-            varTwoType = self.getVarType(varTwo)
-            if varTwoType is Token.INTEGER:
-                valTwo = int(self.getVarValue(varTwo))
-            elif varTwoType is Token.FLOAT:
-                valTwo = float(self.getVarValue(varTwo))
+            v2Type = self.getVarType(v2)
+            if v2Type is Token.INTEGER:
+                x2 = int(self.getVarValue(v2))
+            elif v2Type is Token.FLOAT:
+                x2 = float(self.getVarValue(v2))
 
-        result = valOne + valTwo
-        postFixList.append(str(result))
+        result = x1 + x2
+        postList.append(str(result))
 
-    # Subtracts the two top elements in postFixList
-    def subOper(self, postFixList):
-        varTwo = postFixList.pop()
-        varOne = postFixList.pop()
+    # Subtracts the two top elements in postList
+    def subtraction(self, postList):
+        v2 = postList.pop()
+        v1 = postList.pop()
 
-        valOne = None
-        valTwo = None
+        x1 = None
+        x2 = None
 
         # Find value of first variable
-        if Token.findToken(varOne) is Token.INTEGER_LITERAL:
-            valOne = int(varOne)
-        elif Token.findToken(varOne) is Token.FLOAT_LITERAL:
-            valOne = float(varOne)
+        if Token.findToken(v1) is Token.LITERALINT:
+            x1 = int(v1)
+        elif Token.findToken(v1) is Token.LITERALFLOAT:
+            x1 = float(v1)
         else:
-            varOneType = self.getVarType(varOne)
-            if varOneType is Token.INTEGER:
-                valOne = int(self.getVarValue(varOne))
-            elif varOneType is Token.FLOAT:
-                valOne = float(self.getVarValue(varOne))
+            v1Type = self.getVarType(v1)
+            if v1Type is Token.INTEGER:
+                x1 = int(self.getVarValue(v1))
+            elif v1Type is Token.FLOAT:
+                x1 = float(self.getVarValue(v1))
 
         # Find value of second variable
-        if Token.findToken(varTwo) is Token.INTEGER_LITERAL:
-            valTwo = int(varTwo)
-        elif Token.findToken(varTwo) is Token.FLOAT_LITERAL:
-            valTwo = float(varTwo)
+        if Token.findToken(v2) is Token.LITERALINT:
+            x2 = int(v2)
+        elif Token.findToken(v2) is Token.LITERALFLOAT:
+            x2 = float(v2)
         else:
-            varTwoType = self.getVarType(varTwo)
-            if varTwoType is Token.INTEGER:
-                valTwo = int(self.getVarValue(varTwo))
-            elif varTwoType is Token.FLOAT:
-                valTwo = float(self.getVarValue(varTwo))
+            v2Type = self.getVarType(v2)
+            if v2Type is Token.INTEGER:
+                x2 = int(self.getVarValue(v2))
+            elif v2Type is Token.FLOAT:
+                x2 = float(self.getVarValue(v2))
 
-        result = valOne * valTwo
-        postFixList.append(str(result))
+        result = x1 * x2
+        postList.append(str(result))
 
     # Looks up the stored value of the variable identity lexeme
     def getVarValue(self, varIdent):
@@ -438,7 +435,6 @@ class Interpreter(Parser):
             varType = self.var_input[str(varIdent)][1]
         elif str(varIdent) in self.cons_input:
             varType = self.cons_input[str(varIdent)][1]
-
         return varType
 
     # If the lexeme is a number, true 
