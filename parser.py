@@ -25,42 +25,51 @@ class Parser:
         root = Node(None, None, Type.PROGRAM)
         file = open(filePath)  # Opens the file sent in
         for line in file:  # Compules the file line by line
-            self.compile(line, root)  # Sends it to the parser file for compilation
-        return root #returns the root for the interpreter to do its magic
+            # Sends it to the parser file for compilation
+            self.compile(line, root)
+        return root  # returns the root for the interpreter to do its magic
 
 # Compile function
     def compile(self, input, root):
         # Takes input and sends it to a lexier analyzer
         layer = 1
-        root.addChildNode(Node(root, layer, Type.IMPLEMENT)) #creates the node for the start of the line
+        # creates the node for the start of the line
+        root.add_c_node(Node(root, layer, Type.IMPLEMENT))
         self.lexier.analyzer(input)
         self.getNextToken()  # Gets the next token after the input
-        self.keywords(root.getChildren()[-1], layer)  # Gets the keyword from the input files
+        # Gets the keyword from the input files
+        self.keywords(root.getChildren()[-1], layer)
 
     # Keywords function
     def keywords(self, node, layer):
-        layer += 1 #increments the layer
+        layer += 1  # increments the layer
         # Prints to show that it was being tested as a keyword
         print("Entering <keywords>")
-        self.identifier(node, layer)  # Sends to the term function to determine if it is also an identifier
+        # Sends to the term function to determine if it is also an identifier
+        self.identifier(node, layer)
         while(self.nextToken.TYPE == self.lexier.ADD_OP or self.nextToken.TYPE == self.lexier.SUB_OP):
             self.getNextToken()  # If it is a keyword, it will print the keyword
-            node.addChildNode(Node(node, layer, Type.KEYWORDS)) #adds the keyword as a child of the parent node
+            # adds the keyword as a child of the parent node
+            node.add_c_node(Node(node, layer, Type.KEYWORDS))
             children = node.getChildren()
-            self.identifier(children[-1], layer)  # It will also send to the identifier function
+            # It will also send to the identifier function
+            self.identifier(children[-1], layer)
         print("Exiting <keywords>")
 
     # Identifier function
     def identifier(self, node, layer):
-        layer += 1 #increments the layer
+        layer += 1  # increments the layer
         # Prints to show that it was being tested as an identifier
         print("Entering <identifier>")
-        self.operators(node, layer)  # Sends to the operator function to determine if this is also an operator
+        # Sends to the operator function to determine if this is also an operator
+        self.operators(node, layer)
         while(self.nextToken.TYPE == self.lexier.MULT_OP or self.nextToken.TYPE == self.lexier.DIV_OP):
             self.getNextToken()  # If it is an identifier, it will print the term
-            node.addChildNode(Node(node,layer,Type.IDENTIFIER)) #adds the identifer as a child of the parent node
+            # adds the identifer as a child of the parent node
+            node.add_c_node(Node(node, layer, Type.IDENTIFIER))
             children = node.getChildren()
-            self.operators(children[0], layer)  # It will also send to the operator method
+            # It will also send to the operator method
+            self.operators(children[0], layer)
         # Once all identifiers have been determined it will exit the identifier function
         print("Exiting <identifier>")
 
@@ -71,16 +80,17 @@ class Parser:
         print("Entering <operators>")
         if(self.nextToken.TYPE == self.lexier.IDENT or self.nextToken.TYPE == self.lexier.INT_LIT):
             self.getNextToken()  # Will get the next token if it is an operator
-            node.addChildNode(Node (node, layer, Type.OPERATORS)) #adds the operator as a child of the parent node
+            # adds the operator as a child of the parent node
+            node.add_c_node(Node(node, layer, Type.OPERATORS))
         else:
             # If it isnt an operator it will get the next token and send to the expression function
             if(self.nextToken.TYPE == self.lexier.LEFT_PAREN):
                 self.getNextToken()  # get the next token and send to the keywords function
-                node.addChildNode(Node (node, layer, Type.OPERATORS))
+                node.add_c_node(Node(node, layer, Type.OPERATORS))
                 self.keywords(node.getChildren()[-1], layer)
                 if(self.nextToken.TYPE == self.lexier.RIGHT_PAREN):
                     self.getNextToken()
-                    node.addChildNode(Node (node, layer, Type.OPERATORS))
+                    node.add_c_node(Node(node, layer, Type.OPERATORS))
                 else:
                     self.error()
         # Once all terms have been determined it will exit the operators function
