@@ -5,28 +5,26 @@
 
 from parser import *
 
-parser = Parser()
-
-
 class Interpreter(Parser):
 
     # Constructor
     def __init__(self, sclFilePath):
-        Parser.__init__(self, sclFilePath)
+        #Parser.__init__(self, sclFilePath)
         self.globalVariables = {}
         self.globalConstants = {}
         self.implementVariables = {}
         self.implementConstants = {}
 
     # Performs Python-SCL Interpretation
-    def interpret(self):
+    def interpret(self, filePath):
         print("Parsing SCL File", "\n")
-        parseTree = super().parse()
+        parser = Parser()
+        parseTree = parser.fileTime(filePath)
         print("\nFinished Parsing SCL File")
         print("="*50, "\n")
 
         # Iterate through all of <program> node's direct children
-        for node in parseTree.getRoot().getChildren():
+        for node in parseTree.getChildren():
 
             if node.getNodeType() is NodeType.IMPORT:
                 # Nothing to interpret for imports in this subset of SCL
@@ -47,14 +45,16 @@ class Interpreter(Parser):
         for child in node.getChildren():
             if child.getNodeType() is NodeType.CONST_DEC:
                 self.interpretConstDec(child)
-            elif child.getNodeType() is NodeType.VAR_DEC:
-                self.interpretVarDec(child)
+            elif child.getNodeType() is NodeType.IDENTIFIER:
+                self.interpretIdentifer(child)
 
     # Interprets implement
     def interpretImplement(self, node):
+        if node.getChildren() == None:
+            return
         for child in node.getChildren():
-            if child.getNodeType() is NodeType.FUNCT_LIST:
-                self.interpretFunctList(child)
+            if child.getNodeType() is NodeType.KEYWORDS:
+                self.interpretKeywords(child)
 
     # Interprets const_dec
     def interpretConstDec(self, node):
@@ -69,9 +69,9 @@ class Interpreter(Parser):
             if child.getNodeType() is NodeType.COMP_DECLARE:
                 self.interpretCompDeclare(child)
 
-    # Interprets var_dec
-    def interpretVarDec(self, node):
-        # There should only be one child of <var_dec>
+    # Interprets indentifier
+    def interpretIdentifer(self, node):
+        # There should only be one child of <identifier>
         for child in node.getChildren():
             if child.getNodeType() is NodeType.VAR_LIST:
                 self.interpretVarList(child)
@@ -121,19 +121,23 @@ class Interpreter(Parser):
 
         return returnTypeToken
 
-    # Interprets funct_list
-    def interpretFunctList(self, node):
+    # Interprets Keywords
+    def interpretKeywords(self, node):
+        if node.getChildren() == None:
+            return
         for child in node.getChildren():
-            if child.getNodeType() is NodeType.FUNCT_BODY:
-                self.interpretFunctBody(child)
+            if child.getNodeType() is NodeType.OPERATORS:
+                self.interpretOperators(child)
 
-    # Interprets funct_body
-    def interpretFunctBody(self, node):
+    # Interprets operators
+    def interpretOperators(self, node):
+        if node.getChildren() == None:
+            return
         for child in node.getChildren():
             if child.getNodeType() is NodeType.CONST_DEC:
                 self.interpretConstDec(child)
-            elif child.getNodeType() is NodeType.VAR_DEC:
-                self.interpretVarDec(child)
+            elif child.getNodeType() is NodeType.IDENTIFIER:
+                self.interpretIdentifer(child)
             elif child.getNodeType() is NodeType.PACTIONS:
                 self.interpretPActions(child)
 
@@ -451,6 +455,6 @@ txtFile = input("Type in a file(insert quotation marks around the file): ")
 if (txtFile == ""):
     print("Empty Input, Please input a valid file.")
 else:
-    parser.fileTime(txtFile)
+    parser = Parser()
     interp = Interpreter(parser)
-    interp.interpret()
+    interp.interpret(txtFile)
