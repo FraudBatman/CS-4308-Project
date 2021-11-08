@@ -317,7 +317,7 @@ class Interpreter(Parser):
         postList.append(str(result))    #add it to the results list
 #####################################################################################################
 #####################################################################################################
-    # Divides the two top elements in postList
+    # Divides the two top elements, similar to multiplication
     def division(self, postList):
         v2 = postList.pop()
         v1 = postList.pop()
@@ -352,7 +352,7 @@ class Interpreter(Parser):
         result = x1 / x2
         postList.append(str(result))
 
-    # Adds the two top elements in postList
+    # Adds the two top elements, similar to multiplicatino
     def addition(self, postList):
         v2 = postList.pop()
         v1 = postList.pop()
@@ -387,7 +387,7 @@ class Interpreter(Parser):
         result = x1 + x2
         postList.append(str(result))
 
-    # Subtracts the two top elements in postList
+    # Subtracts the two top elements, similar to multiplication
     def subtraction(self, postList):
         v2 = postList.pop()
         v1 = postList.pop()
@@ -396,7 +396,7 @@ class Interpreter(Parser):
         x2 = None
 
         # Find value of first variable
-        if Token.findToken(v1) is Token.LITERALINT:
+        if Token.findToken(v1) is Token.LITERALINT: 
             x1 = int(v1)
         elif Token.findToken(v1) is Token.LITERALFLOAT:
             x1 = float(v1)
