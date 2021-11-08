@@ -1,0 +1,47 @@
+Input a scl file to interpret
+
+Begin with parsing the scl file
+    With each token parsed, the parser will begin building a parse tree
+    Each full expression in the parse tree will be tied to a single tree node, root
+    Once the parser has completed the file, it will send the root back to the interpreter
+
+Interpreter will go through each expression connected to the root
+    From there, it recursively reads the tree to determine keywords, operators, identifiers, and constants, and their relationship to one another
+        The child of a keyword can be a operator, identifier, or constant
+            If the child is an operator, then its children will be operated upon
+                Example: Operator + has two children, an identifier and a constant. 
+                    The interpreter will interpret this as the Python expression "expression + constant", 
+                    where expression and constant still need to be interpreted
+            If the child is an identifier, the interpreter will use its name as a Python variable name
+                Example: Identifer variableNumber will be converted to the variable "variableNumber" in Python
+            If the child is a constant, the interpreter will use the constant's variableNumber
+                Example A: Constant 45 will be converted to the number 45
+                Example B: Constant "string" will be converted to the string "string"
+                Example C: Constant constantName will have its value stored when defined, and when called, will have its value used.
+                    Example C1: Constant constantName is set to value 45. When constantName is called again, the value 45 will be used.
+
+    With that information, it can convert the expression into its equivalent in Python
+        Example A: The expression "x + 45"
+                        x will be interpreted as an identifier, and will be swapped with the variable x
+                        + will be interpreted as an operator, and will be swapped with the operator +
+                        45 will be interpreted as a constant, and will be swapped with the number 45
+                        The final result is the Python phrase "x + 45"
+
+        Example B: The expression "symbol MM 45"
+                        symbol will be interpreted as a keyword, signifying the declaration of a variable with a hex value
+                        MM will be interpreted as the variable being assigned to, and a variable MM will be created
+                        45 wil be interpret as the hex value 45
+                        The final result is the Python phrase "MM = hex(0x45)
+
+        Example C: The expression "if a[i] > max_elem then"
+                        if will be interpreted as a keyword, that can be converted directly to Python
+
+                        a[ will be interpreted as an identifier belonging to an array, and determine the index before proceeding
+                        i will be interpreted as an identifer, and will be swapped with the variable i
+                            from this, a[i] will be interpreted as the Python equivalent, a[i]
+
+                        > will be interpreted as an operator, and will be swapped with the operator >
+                        max_elem will be interpreted as an identifer, and will be swapped with the variable max_elem
+                        then will be interpreted as a keyword, and will be swapped with the Python equivalent :
+                        The final result is the Python phrase "if a[i] > max_elem:"
+                        The interpreter will also add the neccessary white space until it finds the keyword endif
