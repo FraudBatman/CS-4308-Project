@@ -19,7 +19,7 @@ class Node:
 	def getScanLine(self):
 		return self.scanLine
 
-	def getNodeType(self):
+	def getType(self):
 		return self.nodeType
 
 	# Setter Methods for all fields
@@ -32,18 +32,18 @@ class Node:
 	def setScanLine(self, scanLine):
 		self.scanLine = scanLine
 
-	def setNodeType(self, nodeType):
+	def setType(self, nodeType):
 		self.nodeType = nodeType
 
 	# Adds node object to children list
-	def addChildNode(self, child):
+	def add_c_node(self, child):
 		if self.children is None:
 			self.children = []  # Convert to array from None type
 
 		self.children.append(child)
 
 	# Removes node object from children list
-	def removeChildNode(self, child):
+	def remove_c_node(self, child):
 		if self.children is not None:
 			self.children.remove(child)
 			child.setParent(None)
