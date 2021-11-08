@@ -44,7 +44,10 @@ class Interpreter(Parser):
             elif node.getType() is Type.IMPLEMENT:
                 self.interp_imp(node)
 
-    # Interprets default tokens
+
+
+    # The following methods interpret tokens
+    # default tokens
     def interp_default(self, node):
         for child in node.getChildren():
             if child.getType() is Type.CONST_DEC:
@@ -52,7 +55,7 @@ class Interpreter(Parser):
             elif child.getType() is Type.IDENTIFIER:
                 self.interp_ident(child)
 
-    # Interprets implementation
+    # implementation
     def interp_imp(self, node):
         if node.getChildren() == None:
             return
@@ -60,33 +63,33 @@ class Interpreter(Parser):
             if child.getType() is Type.KEYWORDS:
                 self.interp_keys(child)
 
-    # Interprets const_dec
+    # constant declarations
     def interp_const_declaration(self, node):
         # There should only be one child of <const_dec>
         for child in node.getChildren():
             if child.getType() is Type.CONST_LIST:
                 self.interp_c_list(child)
 
-    # Interprets const_list
+    # constants 
     def interp_c_list(self, node):
         for child in node.getChildren():
             if child.getType() is Type.COMP_DECLARE:
                 self.interp_comp_dec(child)
 
-    # Interprets indentifier
+    # indentifier
     def interp_ident(self, node):
         # There should only be one child of <identifier>
         for child in node.getChildren():
             if child.getType() is Type.VAR_LIST:
                 self.interpretVarList(child)
 
-    # Interprets var_list
+    # variable list
     def interpretVarList(self, node):
         for child in node.getChildren():
             if child.getType() is Type.COMP_DECLARE:
                 self.interp_comp_dec(child)
 
-    # Interprets comp_declare
+    # complete declarations
     def interp_comp_dec(self, node):
         parent = node.getParent()
         third_parent = parent.getParent().getParent()
@@ -115,6 +118,8 @@ class Interpreter(Parser):
             else:
                 self.var_input[lex[1].getLexStr()] = [
                     "", token_type]
+    #End of interpretation methods 
+
 
     # Returns return type token
     def interp_return(self, node):
