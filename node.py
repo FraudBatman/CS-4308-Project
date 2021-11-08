@@ -1,7 +1,7 @@
 from enum import Enum
 
+#general parse tree for our interpreter 
 class Node:
-
 	# Constructor
 	def __init__(self, parent, scanLine, Type):
 		self.parent = parent
@@ -9,20 +9,17 @@ class Node:
 		self.scanLine = scanLine
 		self.Type = Type
 
-	# Getter Methods for all fields
+	# Get methods
 	def getParent(self):
 		return self.parent
 
 	def getChildren(self):
 		return self.children
 
-	def getScanLine(self):
-		return self.scanLine
-
 	def getType(self):
 		return self.Type
 
-	# Setter Methods for all fields
+	# Set Methods
 	def setParent(self, parent):
 		self.parent = parent
 
@@ -67,7 +64,7 @@ class Type(Enum):
 	PROGRAM = "<program>"
 	IMPORT = "<import_stmnt>"
 	SYMBOL = "<symbol_stmnt>"
-	GLOBALS = "<globals>"
+	DEFAULTS = "<DEFAULTS>"
 	IMPLEMENT = "<implement>"
 	CONST_DEC = "<const_dec>"
 	CONST_LIST = "<const_list>"
@@ -77,7 +74,7 @@ class Type(Enum):
 	RET_TYPE = "<ret_type>"
 	KEYWORDS = "<keywords>"
 	OPERATORS = "<operators>"
-	PACTIONS = "<pactions>"
+	PARENTHESIS = "<parenthesis>"
 	ACTION_DEF = "<action_def>"
 	EXP = "<exp>"
 	PVAR_LIST = "<p_var_list>"

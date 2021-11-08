@@ -19,13 +19,12 @@ from parser import *
 class Interpreter(Parser):
     # Constructor
     def __init__(self, sclFilePath):
-        #Parser.__init__(self, sclFilePath)
         self.vars = {}
         self.cons = {}
         self.var_input = {}
         self.cons_input = {}
 
-    # Performs Python-SCL Interpretation
+    # Interpreter method
     def interpret(self, filePath):
         print("Parsing SCL File", "\n")
         parser = Parser()
@@ -35,89 +34,87 @@ class Interpreter(Parser):
 
         # Switch statement to run through all the node's direct children
         for node in parseTree.getChildren():
-            if node.getType() is Type.IMPORT:
+            if node.getType() is Type.IMPORT:   # ignore if node is import
                 pass
-            elif node.getType() is Type.SYMBOL:
+            elif node.getType() is Type.SYMBOL: # ignore if node is symbol
                 pass
-            elif node.getType() is Type.GLOBALS:
+            elif node.getType() is Type.DEFAULTS: #interpret the node as a default if is a part of default
                 self.interp_default(node)
-            elif node.getType() is Type.IMPLEMENT:
+            elif node.getType() is Type.IMPLEMENT: # interpret if node is an implementation
                 self.interp_imp(node)
 
 
 
     # The following methods interpret tokens
+    #
     # default tokens
-    def interp_default(self, node):
-        for child in node.getChildren():
-            if child.getType() is Type.CONST_DEC:
-                self.interp_const_declaration(child)
-            elif child.getType() is Type.IDENTIFIER:
-                self.interp_ident(child)
+    def interp_default(self, node): #default interpreter
+        for child in node.getChildren():    #Gets the child of each child node
+            if child.getType() is Type.CONST_DEC:   #If the child is a constant declaration
+                self.interp_const_declaration(child) # then interpret it
+            elif child.getType() is Type.IDENTIFIER: # If the child is an identifier
+                self.interp_ident(child)             # interpret the identifier 
 
     # implementation
     def interp_imp(self, node):
-        if node.getChildren() == None:
-            return
-        for child in node.getChildren():
-            if child.getType() is Type.KEYWORDS:
-                self.interp_keys(child)
+        if node.getChildren() == None:      #If the implication has no children
+            return                          #Skip
+        for child in node.getChildren():    #If it isnt empty get child of each child node
+            if child.getType() is Type.KEYWORDS: #If the child is a keyword
+                self.interp_keys(child)     #interpret the keyword
 
     # constant declarations
     def interp_const_declaration(self, node):
-        # There should only be one child of <const_dec>
-        for child in node.getChildren():
-            if child.getType() is Type.CONST_LIST:
-                self.interp_c_list(child)
+        for child in node.getChildren():    #Get the children of the declaration(should only be one)
+            if child.getType() is Type.CONST_LIST: #If the child is a constants list
+                self.interp_c_list(child)           # interpret it
 
     # constants 
     def interp_c_list(self, node):
-        for child in node.getChildren():
-            if child.getType() is Type.COMP_DECLARE:
-                self.interp_comp_dec(child)
+        for child in node.getChildren():    #get the children of the constants list
+            if child.getType() is Type.COMP_DECLARE:    #if the child is a complete declaration
+                self.interp_comp_dec(child)             #interpret it
 
     # indentifier
-    def interp_ident(self, node):
-        # There should only be one child of <identifier>
-        for child in node.getChildren():
-            if child.getType() is Type.VAR_LIST:
-                self.interpretVarList(child)
+    def interp_ident(self, node): 
+        for child in node.getChildren():    #get the children of the identifiers
+            if child.getType() is Type.VAR_LIST:    #if the child is a variable list
+                self.interpretVarList(child)    #interpret it
 
     # variable list
     def interpretVarList(self, node):
-        for child in node.getChildren():
-            if child.getType() is Type.COMP_DECLARE:
-                self.interp_comp_dec(child)
+        for child in node.getChildren():    #get the children of the variable list
+            if child.getType() is Type.COMP_DECLARE:    #if the child is a complete declaration
+                self.interp_comp_dec(child)         #interpret it
 
     # complete declarations
-    def interp_comp_dec(self, node):
-        parent = node.getParent()
-        third_parent = parent.getParent().getParent()
+    def interp_comp_dec(self, node):    #interprets the node
+        parent = node.getParent()       #retrieve the parent node 
+        third_parent = parent.getParent().getParent()   #retrieve the parent node of the parent node
 
-        isConstant = True if parent.getType() is Type.CONST_LIST else False
-        isDefault = True if third_parent.getType() is Type.GLOBALS else False
+        #if the parent type is a constansts list, then the node is a constant 
+        isConstant = True if parent.getType() is Type.CONST_LIST else False 
+        #if the parent of the parents node is a default node, then the node is a default also
+        isDefault = True if third_parent.getType() is Type.DEFAULTS else False
 
-        lex = node.getScanLine().getLex()
+        lex = node.getScanLine().getLex()   #scans the line of each node
         token_type = None
 
-        for child in node.getChildren():
-            if child.getType() is Type.RET_TYPE:
-                token_type = self.interp_return(child)
+        for child in node.getChildren():    #get the children nodes
+            if child.getType() is Type.RET_TYPE:    #If it is a return node
+                token_type = self.interp_return(child)  #Interpret it
 
-        if isDefault is True:
-            if isConstant is True:
-                self.cons[lex[1].getLexStr()] = [
-                    lex[3].getLexStr(), token_type]
+        if isDefault is True:       #check if the node is a default token
+            if isConstant is True:  #if it is, check if it is also a constant
+                self.cons[lex[1].getLexStr()] = [lex[3].getLexStr(), token_type] #if it is create a const in the form of a string 
             else:
-                self.vars[lex[1].getLexStr()] = [
-                    "", token_type]
+                self.vars[lex[1].getLexStr()] = ["", token_type] #if it isnt then create a string in the form of a variable
         else:
-            if isConstant is True:
-                self.cons_input[lex[1].getLexStr()] = [
-                    lex[3].getLexStr(), token_type]
+            if isConstant is True:  #if it isnt a default token
+                self.cons_input[lex[1].getLexStr()] = [lex[3].getLexStr(), token_type]#if it is create a const in the form of a string
             else:
-                self.var_input[lex[1].getLexStr()] = [
-                    "", token_type]
+                self.var_input[lex[1].getLexStr()] = ["", token_type]#if it isnt then create a string in the form of a variable
+    #
     #End of interpretation methods 
 
 
@@ -147,11 +144,11 @@ class Interpreter(Parser):
                 self.interp_const_declaration(child)
             elif child.getType() is Type.IDENTIFIER:
                 self.interp_ident(child)
-            elif child.getType() is Type.PACTIONS:
-                self.interpretPActions(child)
+            elif child.getType() is Type.PARENTHESIS:
+                self.interpret_parenthesis(child)
 
-    # Interprets pactions
-    def interpretPActions(self, node):
+    # Interprets parenthesis operations
+    def interpret_parenthesis(self, node):
         for child in node.getChildren():
             if child.getType() is Type.ACTION_DEF:
                 self.interpretActionDef(child)
@@ -233,18 +230,18 @@ class Interpreter(Parser):
 
     # Interprets exp node and returns expression value
     def interp_exprs(self, node):
-        lineLexems = node.getScanLine().getLex()
+        lineLexems = node.getScanLine().getLex()    #Gets the line for the expression
 
         explex = lineLexems[3:len(lineLexems)]
 
         # Create a precedence for operands
-        precedence = {"*": 1, "/": 1, "+": 2, "-": 2}
+        precedence = {"*": 1, "/": 1, "+": 2, "-": 2} #PEMDAS
 
-        lexemeList = []
-        operList = []
+        lexemeList = []     #List of variables
+        operList = []       #List of operations
 
-        index = 0
-        exprResult = 0
+        index = 0           #Index of the list
+        exprResult = 0      #Solution to the expression
 
         for lexeme in explex:
             if lexeme.getToken().getNumCode() in (2, 3, 6, 7, 10, 11):
